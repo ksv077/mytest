@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-psql-test
+  labels:
+    app: my-psql-test
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-psql-test
+  template:
+    metadata:
+      labels:
+        app: my-psql-test
+    spec:
+      containers:
+      - name: psql-pod
+        image: gcr.io/testproject-362005/psqlv1:latest
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - mountPath: /home
+          name: shared-home
+      - name: my-pod
+        image: gcr.io/testproject-362005/mysqlv1:latest
+        ports:
+        - containerPort: 9803
+        volumeMounts:
+        - mountPath: /opt
+          name: new-home
+        - mountPath: /home
+          name: shared-home
+      volumes:
+      - name: shared-home
+        emptyDir: {}
+      - name: new-home
+        emptyDir: {}

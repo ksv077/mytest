@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-pod
+  namespace: default
+  labels:
+    app: stress-mysql-pod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stress-mysql-pod
+  template:
+    metadata:
+      labels:
+        app: stress-mysql-pod
+    spec:
+      containers:
+      - name: mysql-pod
+        image: gcr.io/testproject-362005/mqlstress:v1
+        resources:
+          limits:
+            memory: 500Mi
+            cpu: 500m
+          requests:
+            memory: 300Mi
+            cpu: 300m
+        ports:
+        - containerPort: 9803
+
+
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mysql-hpa
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mysql-pod
+  minReplicas: 2
+  maxReplicas: 6
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
