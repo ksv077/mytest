@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage ('checkout'){
             steps {
-                git branch: 'main', url: 'https://github.com/ksv077/mytest.git'
+                git branch: 'gcp-terraform', url: 'https://github.com/ksv077/mytest.git'
             }
         }
       
