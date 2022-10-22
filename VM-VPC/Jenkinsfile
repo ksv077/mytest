@@ -16,9 +16,13 @@ pipeline {
 
 		stage('Set Terraform path') {
             steps {
-                script {
+                //script {
                     //def tfHome = tool name: 'Terraform'
-                    withEnv(["PATH=/usr/local/bin:$env.PATH"])
+                    //withEnv(["PATH=/usr/local/bin:$env.PATH"])
+		    sh '''
+		    cd /usr/local/bin
+		    terraform init
+		    '''
                 }
                 sh 'echo $SVC_ACCOUNT_KEY | base64 -d > ./VM-VPC/terraform.json'
 		sh 'pwd'
