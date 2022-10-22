@@ -41,8 +41,8 @@ pipeline {
 			  dir('VM-VPC')
 			 {
                 //sh 'terraform $TF_ACTION $TF_APPROVE'
-				 sh 'terraform plan'
-				 //sh 'terraform destroy --auto-approve'
+				 //sh 'terraform plan'
+				 sh 'terraform apply --auto-approve'
 			 }
 		 }
 	}
